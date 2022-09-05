@@ -12,6 +12,12 @@ class Category(models.Model):
         unique=True
     )
 
+    def get_absolute_url(self):
+        return reverse(
+            'shop:product_list_by_category',
+            args=[self.slug]
+        )
+
     class Meta:
         ordering = ('name',)
         verbose_name = 'category'
@@ -19,12 +25,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
-    def get_absolute_url(self):
-        return reverse(
-            'shop:product_list_by_category',
-            args=[self.slug]
-        )
 
 
 class Product(models.Model):
@@ -52,7 +52,13 @@ class Product(models.Model):
     )
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def get_absolute_url(self):
+        return reverse(
+            'shop:product_detail',
+            args=[self.id, self.slug],
+        )
 
     class Meta:
         ordering = ('name',)
@@ -60,9 +66,3 @@ class Product(models.Model):
 
         def __str__(self):
             return self.name
-
-    def get_absolute_url(self):
-        return reverse(
-            'shop:product_detail',
-            args=[self.id, self.slug],
-        )
